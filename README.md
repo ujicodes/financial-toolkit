@@ -1,16 +1,57 @@
-# React + Vite
+# Financial analysis toolkit
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Eight interactive financial analysis tools with a shared visual system, built in
+React. Every figure is computed live from the inputs — no static screenshots, no
+hardcoded results.
 
-Currently, two official plugins are available:
+**Live: https://financial-toolkit-gilt.vercel.app**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Tool | What it computes |
+|------|------------------|
+| Unit economics | CAC, contribution margin, discounted LTV, LTV:CAC, and the month a cohort crosses back above zero |
+| Revenue growth | Additive bridge across churn, contraction, price, expansion and new business; gross and net revenue retention |
+| Ratio benchmarking | 15 ratios in five families, percentile-ranked against a selectable peer set |
+| Rate sensitivity | Interest expense across a fixed/floating debt stack, coverage, free cash flow and DCF valuation, swept across the rate curve |
+| Working capital | DSO, DIO, DPO and cash conversion cycle across companies; cash releasable by hitting peer medians |
+| Cash forecast | Monthly AR/inventory/AP projection with seasonality; peak funding need against a minimum-cash floor |
+| Currency exposure | Translation impact on revenue, cost and operating profit by currency, with hedge coverage and natural-hedge identification |
+| Stock splits | Cumulative split factors, raw vs split-adjusted price restatement, event-window returns |
 
-## React Compiler
+Two further tools (mortgage simulator, credit card rewards optimizer) are in
+`src/tools` but not wired into the live navigation.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Design system
 
-## Expanding the ESLint configuration
+Shared across every tool, defined as the `C` object at the top of each file.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Token | Hex | Use |
+|---|---|---|
+| paper | `#EDEFF0` | page ground |
+| card | `#F7F8F8` | panel fill |
+| ink | `#16232B` | text, primary series |
+| dim | `#5C7078` | labels, secondary text |
+| rule | `#C7CFD2` | hairlines, gridlines |
+| pos | `#1F5F4E` | favorable values |
+| neg | `#A3341F` | unfavorable values |
+| mark | `#B08814` | selected state |
+
+Green and red encode direction rather than decorate. Serif carries the single
+headline figure each tool exists to answer; monospace is used only for numerals
+so digits align in tables.
+
+## Running locally
+
+```bash
+npm install
+npm run dev
+```
+
+Built with React, Vite, Recharts and Tailwind CSS.
+
+## Data
+
+The company financials are constructed, not real filings — they exist to
+demonstrate the calculations. The one exception is the stock split tool, where
+the split dates and ratios are the actual public record but the price series is
+a seeded synthetic walk; that file carries an inline warning and the yfinance
+snippet needed to replace it.
